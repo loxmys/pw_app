@@ -1,0 +1,9 @@
+.error-message {
+  color: red;
+  display: none;
+}
+.has-error {
+  .error-message {
+    display: block;
+  }
+}
