@@ -21,7 +21,7 @@ const requests = tree.select('requests');
 function requestInterceptor(req) {
     req.requestId = uuid.v4();
     requests.push(req);
-    return {...req, headers:{authentication: `bearer ${TokenService.getToken()}`}};
+    return {...req, headers:{Authorization: `Bearer ${TokenService.getToken()}`}};
 }
 
 function responseInterceptor(data, config) {
@@ -33,7 +33,7 @@ function errorInterceptor(data, config) {
         switch(data.response.statusCode) {
             case 401:
             case 403:
-                location.href = '/';
+                window.location.href = '/login';
                 break;
             default:
                 messagesService.addMessage(MessagesService.MESSAGE_TYPE.ERROR, data.response.data);

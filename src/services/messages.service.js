@@ -11,7 +11,9 @@ export class MessagesService {
         this.messages = tree.select('messages');
     }
     addMessage(type, message) {
-        this.messages.push({id: uuid.v4(), message, type});
+        const id = uuid.v4();
+        this.messages.push({id, message, type});
+        setTimeout(()=>this.removeMessage(id), 5000);
     }
     removeMessage(id) {
         this.messages.select({id}).unset();
