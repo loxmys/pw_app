@@ -6,10 +6,14 @@ import { API_ENDPOINT } from './properties';
 import {UserService} from './services/user.service';
 import {TokenService} from './services/token.service';
 import {MessagesService} from './services/messages.service';
+import {TransactionService} from "./services/transaction.service";
 
 
 export const tree = new Baobab({
     user: null,
+    transactionList: null,
+    transaction: null,
+    userList: null,
     requests: [],
     messages: [],
 });
@@ -36,6 +40,7 @@ function errorInterceptor(data, config) {
                 window.location.href = '/login';
                 break;
             default:
+                console.log(data.response.data);
                 messagesService.addMessage(MessagesService.MESSAGE_TYPE.ERROR, data.response.data);
         }
     }
@@ -47,4 +52,5 @@ api.addResponseInterceptor(responseInterceptor);
 api.addErrorInterceptor(errorInterceptor);
 
 export const userService = new UserService(api, tree);
+export const transactionService = new TransactionService(api, tree);
 export const messagesService = new MessagesService(tree);

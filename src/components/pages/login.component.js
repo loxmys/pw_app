@@ -15,7 +15,7 @@ export class Login extends React.Component {
     login(data) {
         const {email, password} = data;
         userService.login(email, password).then(() => {
-            this.props.transition.router.stateService.go('home');
+            this.props.transition.router.stateService.go('internal');
         })
     }
     toggleButton(enable) {
@@ -24,20 +24,24 @@ export class Login extends React.Component {
     render() {
         return (
             <div>
-                <h1>Login</h1>
-                <Formsy onValidSubmit={this.login} onValid={()=>this.toggleButton(true)} onInvalid={()=>this.toggleButton(false)} >
-                    <Input type="email"
-                           name="email"
-                           validations="isEmail"
-                           placeholder="email"
-                           validationError="This is not a valid email"
-                           required />
-                    <Input type="password"
-                           name="password"
-                           placeholder="password"
-                           required />
-                    <button disabled={!this.state.enableSubmit} className="btn btn-primary" type="submit">Login</button>
-                </Formsy>
+                <div className="row align-items-center justify-content-center w-75 mr-auto ml-auto">
+                    <div className="col">
+                        <h1>Login</h1>
+                        <Formsy onValidSubmit={this.login} onValid={()=>this.toggleButton(true)} onInvalid={()=>this.toggleButton(false)} >
+                            <Input type="email"
+                                   name="email"
+                                   validations="isEmail"
+                                   placeholder="email"
+                                   validationError="This is not a valid email"
+                                   required />
+                            <Input type="password"
+                                   name="password"
+                                   placeholder="password"
+                                   required />
+                            <button disabled={!this.state.enableSubmit} className="btn btn-primary" type="submit">Login</button>
+                        </Formsy>
+                    </div>
+                </div>
             </div>
         )
     }

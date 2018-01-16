@@ -17,7 +17,7 @@ export class Register extends React.Component {
 
         const {username, email, password} = data;
         userService.register(username, email, password).then(() => {
-            this.props.transition.router.stateService.go('home');
+            this.props.transition.router.stateService.go('internal');
         })
     }
     toggleButton(enable) {

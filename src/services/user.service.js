@@ -6,6 +6,7 @@ export class UserService {
         this.api = api;
         this.tree = tree;
         this.user = this.tree.select('user');
+        this.userList = this.tree.select('userList');
     }
 
     register(username, email, password) {
@@ -27,7 +28,14 @@ export class UserService {
             return id_token;
         });
     }
-
+    filteredUserList(filter){
+        return this.api.custom('api/protected/users/list').post({filter}).then((response) => {
+            const result = response.body();
+            const userList = result.map(item => item.data());
+            this.userList.set(userList);
+            return userList;
+        });
+    }
     userInfo() {
         return this.api.custom('api/protected/user-info').get().then((response) => {
             const result = response.body();

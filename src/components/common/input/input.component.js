@@ -7,6 +7,7 @@ class Input extends React.Component {
     static propTypes = {
         type: PropTypes.oneOf(['text', 'password', 'number', 'email']),
         placeholder: PropTypes.string,
+        defaultValue: PropTypes.any,
     };
 
     static defaultProps = {
@@ -34,7 +35,9 @@ class Input extends React.Component {
         const inputClass = !valid && touched ? 'is-invalid' : (valid && touched ? 'is-valid' : '');
         return (
             <div className={`form-group ${!valid && touched ? 'has-error' : ''}`}>
-                <input  className={`form-control ${inputClass}`}
+                <input
+                    defaultValue={this.props.defaultValue}
+                       className={`form-control ${inputClass}`}
                        onChange={this.changeValue}
                         placeholder={placeholder}
                        type={type} />
