@@ -5,6 +5,9 @@ import Formsy from 'formsy-react';
 import Input from '../common/input/input.component';
 import { addValidationRule } from 'formsy-react';
 import {transactionService, userService} from "../../data.manager";
+import {messagesService} from "../../data.manager";
+import {MessagesService} from "../../services/messages.service";
+
 @branch({
     user: [ 'user' ],
     userList: ['userList']
@@ -13,12 +16,9 @@ export class NewTransaction extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            findUserState: '',
             enableSubmit: false
         };
-        this.setSelectedUser = this.setSelectedUser.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        console.log(props.transition.router.stateService.params);
         addValidationRule('max', function (values, value, otherField) {
             return Number(value) <= Number(otherField);
         });
@@ -27,13 +27,9 @@ export class NewTransaction extends React.Component {
     handleSubmit(event) {
         transactionService.createTransaction(event.username, event.amount).then(() => {
             userService.userInfo();
+            messagesService.addMessage(MessagesService.MESSAGE_TYPE.SUCCESS, 'Successful');
             this.props.transition.router.stateService.go('internal.transaction-list');
-        }).catch(() => {
         });
-    }
-
-    setSelectedUser(findUserState) {
-        this.setState({findUserState: findUserState});
     }
 
     toggleButton(enable) {
@@ -57,14 +53,13 @@ export class NewTransaction extends React.Component {
                                 type="text"
                                 defaultValue={username || ''}
                                 placeholder="Find User"
-                                onUserSelect={this.setSelectedUser}
                                 required/>
                         </div>
                         <div className="col-md-6">
                             <label>Amount</label>
                             <Input
-                                    defaultValue={amount || 0}
-                                    validations={{max:user.balance}}
+                                    defaultValue={(amount < 0 ? - amount : amount) || 0}
+                                    validations={{max: user.balance}}
                                     type="number"
                                     name="amount"
                                     validationError="Transaction amount  greater than the current balance"

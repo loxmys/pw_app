@@ -13,17 +13,23 @@ export class UserSearch extends React.Component {
             user: '',
             isSelectedUser: false,
         };
-        if (this.props.defaultValue){
-            this.setState({value: this.props.defaultValue});
-        }
+
         this.findUser = this.findUser.bind(this);
         this.onFocus = this.onFocus.bind(this);
         this.onClick = this.onClick.bind(this);
         this.setWrapperRef = this.setWrapperRef.bind(this);
         this.handleClickOutside = this.handleClickOutside.bind(this);
     }
+
     componentDidMount() {
         document.addEventListener('mousedown', this.handleClickOutside);
+        if (this.props.defaultValue){
+            this.setState({
+                value: this.props.defaultValue,
+                isSelectedUser: true,
+            });
+            this.props.setValue(this.props.defaultValue);
+        }
     }
 
     componentWillUnmount() {
@@ -31,10 +37,11 @@ export class UserSearch extends React.Component {
     }
 
     findUser(event) {
-        this.props.setValue(event.currentTarget.value);
-        this.setState({value: event.target.value});
-        if ( event.target.value !== ''){
-            userService.filteredUserList(event.target.value);
+        const value = event.target.value;
+        this.props.setValue(value);
+        this.setState({value});
+        if ( value !== ''){
+            userService.filteredUserList(value);
             this.setState({isSelectedUser: false,});
         }
     }
@@ -68,7 +75,6 @@ export class UserSearch extends React.Component {
             focus: false,
             isSelectedUser: true
         });
-        this.props.onUserSelect(this.state);
     }
 
     render() {
@@ -82,21 +88,24 @@ export class UserSearch extends React.Component {
         const touched = !pristine || submitted;
         const inputClass = !valid && touched && !this.state.isSelectedUser ? 'is-invalid' : (valid && touched && this.state.isSelectedUser ? 'is-valid' : '');
         return (
-            <div ref={this.setWrapperRef} className={['dropdown w-100 form-group',
-                // this.state.error ? 'has-error': '',
-                !valid && touched && !this.state.isSelectedUser ? 'has-error' : '',
-                this.state.focus ? 'show' : ''].join(' ')}>
+            <div ref={this.setWrapperRef} className={
+                [
+                    'dropdown w-100 form-group',
+                    !valid && touched && !this.state.isSelectedUser ? 'has-error' : '',
+                    this.state.focus ? 'show' : ''
+                ].join(' ')}>
                 <input
-                    className={["form-control w-100 ",
-                    inputClass].join(' ')}
+                    className={`form-control w-100 ${inputClass}`}
                     onFocus={this.onFocus}
                     value={this.state.value}
                     onChange={this.findUser}
                     placeholder={placeholder} type={type} />
                 <small className="error-message">{error}</small>
-                <div className={['dropdown-menu w-100', this.state.focus ? 'show ' : ''].join(' ')} aria-labelledby="dropdownMenuButton">
-                    <a className="dropdown-item" href="#">Enter the letter to search</a>
-                    {this.props.userList && this.props.userList.map(user=><a onClick={() =>  {this.onClick(user)}} key={user.id} className="dropdown-item" href="#">{user.name}</a>)}
+                <div className={`dropdown-menu w-100 ${this.state.focus ? 'show ' : ''}`} aria-labelledby="dropdownMenuButton">
+                    <a className="dropdown-item" >Enter the letter to search</a>
+                    {this.props.userList && this.props.userList.map(user => (
+                        <a onClick={() => this.onClick(user)} key={user.id} className="dropdown-item" >{user.name}</a>
+                    ))}
                 </div>
             </div>
         )

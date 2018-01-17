@@ -8,7 +8,6 @@ export class Internal extends React.Component {
         super(props);
     }
     render() {
-
         return (
             <div>
                 <Nav transaction={this.props.transition}/>

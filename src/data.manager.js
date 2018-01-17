@@ -18,6 +18,8 @@ export const tree = new Baobab({
     messages: [],
 });
 
+let router = null;
+
 export const api = restful(API_ENDPOINT, fetchBackend(fetch));
 
 const requests = tree.select('requests');
@@ -32,17 +34,22 @@ function responseInterceptor(data, config) {
     requests.select({requestId: config.requestId}).unset();
 }
 
+
+
 function errorInterceptor(data, config) {
     if(data.response && data.response.statusCode) {
         switch(data.response.statusCode) {
             case 401:
             case 403:
-                window.location.href = '/login';
+                if(router) {
+                    router.stateService.go('login');
+                }
+                else {
+                    window.location.href = '/login';
+                }
                 break;
-            default:
-                console.log(data.response.data);
-                messagesService.addMessage(MessagesService.MESSAGE_TYPE.ERROR, data.response.data);
         }
+        messagesService.addMessage(MessagesService.MESSAGE_TYPE.ERROR, data.response.data);
     }
     requests.select(config).unset();
 }
@@ -50,6 +57,10 @@ function errorInterceptor(data, config) {
 api.addRequestInterceptor(requestInterceptor);
 api.addResponseInterceptor(responseInterceptor);
 api.addErrorInterceptor(errorInterceptor);
+
+export function attachRouter(_router) {
+    router = _router;
+}
 
 export const userService = new UserService(api, tree);
 export const transactionService = new TransactionService(api, tree);

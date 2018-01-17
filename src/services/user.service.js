@@ -40,7 +40,6 @@ export class UserService {
         return this.api.custom('api/protected/user-info').get().then((response) => {
             const result = response.body();
             const user = result.data().user_info_token;
-            console.log(user);
             this.user.set(user);
             return user;
         })

@@ -2,6 +2,8 @@ import React from 'react';
 import Formsy from 'formsy-react';
 import { userService } from '../../data.manager';
 import Input from '../common/input/input.component';
+import { UISref } from '@uirouter/react';
+import {Messages} from "../common/messages/messages.component";
 
 export class Login extends React.Component {
     constructor(props) {
@@ -24,23 +26,28 @@ export class Login extends React.Component {
     render() {
         return (
             <div>
-                <div className="row align-items-center justify-content-center w-75 mr-auto ml-auto">
-                    <div className="col">
-                        <h1>Login</h1>
-                        <Formsy onValidSubmit={this.login} onValid={()=>this.toggleButton(true)} onInvalid={()=>this.toggleButton(false)} >
-                            <Input type="email"
-                                   name="email"
-                                   validations="isEmail"
-                                   placeholder="email"
-                                   validationError="This is not a valid email"
-                                   required />
-                            <Input type="password"
-                                   name="password"
-                                   placeholder="password"
-                                   required />
-                            <button disabled={!this.state.enableSubmit} className="btn btn-primary" type="submit">Login</button>
-                        </Formsy>
-                    </div>
+                <Messages/>
+                <div className="card mx-auto mt-4 p-4 col-md-6">
+                    <h1 className="card-title text-center">Login</h1>
+                    <Formsy className="text-center" onValidSubmit={this.login} onValid={()=>this.toggleButton(true)} onInvalid={()=>this.toggleButton(false)} >
+                        <Input type="email"
+                               name="email"
+                               validations="isEmail"
+                               placeholder="email"
+                               validationError="This is not a valid email"
+                               required />
+                        <Input type="password"
+                               name="password"
+                               placeholder="password"
+                               required />
+                        <button disabled={!this.state.enableSubmit} className="btn btn-primary test-center mx-auto" type="submit">Login</button>
+                        <div className="mt-2">
+                            Don't have an account?
+                            <UISref to="register">
+                                <a> Sign Up</a>
+                            </UISref>
+                        </div>
+                    </Formsy>
                 </div>
             </div>
         )

@@ -10,7 +10,6 @@ export class TransactionService {
         return this.api.custom('api/protected/transactions').post({name, amount}).then((response) => {
             const result = response.body();
             const transaction = result.data();
-            console.log(JSON.stringify(transaction));
             this.transaction.set(transaction);
             return transaction;
         });

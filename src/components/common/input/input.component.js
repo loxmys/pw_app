@@ -20,6 +20,12 @@ class Input extends React.Component {
         this.changeValue = this.changeValue.bind(this);
     }
 
+    componentDidMount() {
+        if(this.props.defaultValue) {
+            this.props.setValue(this.props.defaultValue);
+        }
+    }
+
     changeValue(event) {
         this.props.setValue(event.currentTarget.value);
     }

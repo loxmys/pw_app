@@ -19,11 +19,6 @@ export class Nav extends React.Component {
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
                 <ul className="navbar-nav mr-auto">
                     <li className="nav-item">
-                        <UISref to="internal.transactions">
-                            <a className="nav-link">Home</a>
-                        </UISref>
-                    </li>
-                    <li className="nav-item">
                         <UISref to="internal.transaction-list">
                             <a className="nav-link">Transaction List</a>
                         </UISref>
@@ -35,10 +30,14 @@ export class Nav extends React.Component {
                     </li>
                 </ul>
                 <ul className="navbar-nav ml-auto">
-                    <span className="navbar-text">User Name: {this.props.user.name}  </span>
+                    <li className="nav-item">
+                        <UISref to="internal.userinfo">
+                            <a className="nav-link">User Name: {this.props.user.name} </a>
+                        </UISref>
+                    </li>
                     <span className="navbar-text">Balance: {this.props.user.balance}</span>
                     <li className="nav-item">
-                        <a className="nav-link" href="#" onClick={()=>this.logout()}>logout</a>
+                        <a className="nav-link" href="javascript:void(0)" onClick={this.logout}>logout</a>
                     </li>
                 </ul>
             </nav>
